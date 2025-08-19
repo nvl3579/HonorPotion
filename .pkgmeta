@@ -1,0 +1,4 @@
+package-as: HonorPotion
+
+ignore:
+  - README.md
