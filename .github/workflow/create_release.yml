@@ -13,7 +13,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Build Project
-        run: zip HonorPotion-${{ github.ref }}.zip HonorPotion.toc HonorPotion.lua LICENSE README.md
+        run: |
+          mkdir HonorPotion
+          cp HonorPotion.toc HonorPotion.lua LICENSE HonorPotion/
+          zip HonorPotion-${{ github.ref }}.zip HonorPotion
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
