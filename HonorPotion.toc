@@ -1,5 +1,5 @@
 ## Interface: 110200
-## Version: 0.0.1
+## Version: @project-version@
 ## Title: HonorPotion
 ## Notes: Get a reminder when you're in a Battleground and don't have an honor potion active
 ## Author: github.com/nvl3579
