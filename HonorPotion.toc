@@ -1,4 +1,4 @@
-## Interface: 110200
+## Interface: 120001
 ## Version: @project-version@
 ## Title: HonorPotion
 ## Notes: Get a reminder when you're in a Battleground and don't have an honor potion active
