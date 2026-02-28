@@ -1,9 +1,12 @@
+name: Create Release
+
+permissions:
+  contents: write
+
 on:
   push:
     tags:
     - 'v*'
-
-name: Create Release
 
 jobs:
   build:
@@ -16,24 +19,12 @@ jobs:
         run: |
           mkdir HonorPotion
           cp HonorPotion.toc HonorPotion.lua LICENSE HonorPotion/
-          zip HonorPotion-${{ github.ref }}.zip HonorPotion
+          zip -r HonorPotion-${{ github.ref_name }}.zip HonorPotion
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
           draft: false
+          fail_on_unmatched_files: true
+          files: HonorPotion-${{ github.ref_name }}.zip
           prerelease: false
-      - name: Upload Release Asset
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./HonorPotion-${{ github.ref }}.zip
-          asset_name: HonorPotion-${{ github.ref }}.zip
-          asset_content_type: application/zip
+          token: ${{ secrets.GITHUB_TOKEN }}
