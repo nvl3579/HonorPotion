@@ -16,10 +16,14 @@ function f:Initalize()
     print(ADDON_NAME .. " loaded!")
 end
 
--- Returns the duration in seconds that the honor potion has remaining on the player before it expires.
+-- Returns the duration in seconds that the honor potion has remaining on the
+-- player before it expires, or nil if aura data cannot be queried.
 function f:HonorPotionDuration()
     local aura = C_UnitAuras.GetAuraDataBySpellName("player", HONOR_POTION_NAME)
-    if aura == nil or GetTime() >= aura.expirationTime then
+    if aura == nil then
+        return nil
+    end
+    if GetTime() >= aura.expirationTime then
         return 0
     end
     return math.floor(aura.expirationTime - GetTime())
@@ -37,8 +41,12 @@ function f:PLAYER_ENTERING_BATTLEGROUND(event)
         if self.timer ~= nil then
             self.timer:Cancel()
         end
+        local duration = f:HonorPotionDuration()
+        if duration == nil then
+            return
+        end
         -- Warn the user when there's 30 seconds left on the honor potion.
-        self.timer = C_Timer.NewTimer(math.max(0, f:HonorPotionDuration() - 30), function()
+        self.timer = C_Timer.NewTimer(math.max(0, duration - 30), function()
             if not self.timer:IsCancelled() and C_PvP.IsBattleground() then
                 StaticPopup_Show(ADDON_NAME)
             end
