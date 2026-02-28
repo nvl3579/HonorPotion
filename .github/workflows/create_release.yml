@@ -4,6 +4,12 @@ on:
   push:
     tags:
     - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to build"
+        required: true
+        type: string
 
 jobs:
   build:
@@ -11,17 +17,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.ref }}
       - name: Build Project
         run: |
           mkdir HonorPotion
           cp HonorPotion.toc HonorPotion.lua LICENSE HonorPotion/
-          zip -r HonorPotion-${{ github.ref_name }}.zip HonorPotion
+          zip -r HonorPotion-${{ github.event.inputs.tag || github.ref_name }}.zip HonorPotion
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           draft: false
           fail_on_unmatched_files: true
-          files: HonorPotion-${{ github.ref_name }}.zip
+          files: HonorPotion-${{ github.event.inputs.tag || github.ref_name }}.zip
           prerelease: false
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
