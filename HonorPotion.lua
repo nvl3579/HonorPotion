@@ -1,5 +1,5 @@
 ADDON_NAME = "HonorPotion"
-HONOR_POTION_NAME = "Vicious Flask of Honor"
+HONOR_POTION_NAME = "Vicious Thalassian Flask of Honor"
 
 local f = CreateFrame("Frame")
 
