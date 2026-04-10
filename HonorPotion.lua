@@ -37,6 +37,10 @@ function f:PLAYER_ENTERING_BATTLEGROUND(event)
         if self.timer ~= nil then
             self.timer:Cancel()
         end
+        -- Can't query honor potion duration when aura query is restricted.
+        if C_Secrets.ShouldAurasBeSecret() then
+            return
+        end
         -- Warn the user when there's 30 seconds left on the honor potion.
         self.timer = C_Timer.NewTimer(math.max(0, f:HonorPotionDuration() - 30), function()
             if not self.timer:IsCancelled() and C_PvP.IsBattleground() then
